@@ -40,6 +40,8 @@ There are many opportunities for improvement.
 
 ### Model
 
+The model is a Mixed Integer Second Order Cone Program (MISOCP) and can be solved by, e.g., Gurobi.
+
 **Variables:**
 
 * $p_i=(x_i, y_i) \in \mathbb{R}^2$: Position of drone or terminal $i\in A$. For terminals $T$, this is fixed.
