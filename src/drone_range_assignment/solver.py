@@ -116,6 +116,9 @@ class EdgeVars:
                 )
                 >= len(instance.terminals)
             )
+            for t in instance.terminals:
+                self.model.addConstr(sum(self._vars[(t, w)] for w in instance.items() if t!=w) >= 1)
+                self.model.addConstr(sum(self._vars[(w, t)] for w in instance.items() if t!=w) >= 1)
 
     def used(self, a: Agent, b: Agent) -> typing.Any:
         return self._vars[(a, b)]
@@ -242,7 +245,7 @@ class Solver:
         self.model.setParam("TimeLimit", timelimit)
         self.model.optimize(callback)
         lb = self.model.ObjBound
-        if self.model.numSolutions > 0:
+        if self.model.SolCount > 0:
             solution = Solution(
                 self.instance,
                 self.power.get_power_assignments(),
