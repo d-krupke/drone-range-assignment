@@ -16,7 +16,7 @@ Determine the optimal placement of drones and range assignments for both termina
 **Input:**
 
 1. **Terminals:** A predefined set of terminal nodes $T$ positioned at fixed locations within a 2D plane.
-2. **Drones:** An allocation of \( k \) drones $D$ available for strategic placement within the plane.
+2. **Drones:** An allocation of $k$ drones $D$ available for strategic placement within the plane.
 
 $A=T\cup D$ is the set of all agents.
 
@@ -35,44 +35,43 @@ The problem can be efficiently solved via a Second Order Cone Program, if the to
 
 ## Solver
 
-Currently, there is only a rather inefficient solver that uses a lot of Big-M to compute the topology.
-There are many opportunities for improvement.
+The current solver leverages numerous Big-M formulations to determine the network topology, offering ample room for enhancements.
 
-### Model
+### Model Description
 
-The model is a Mixed Integer Second Order Cone Program (MISOCP) and can be solved by, e.g., Gurobi.
+The computational model is a Mixed Integer Second Order Cone Program (MISOCP), solvable by advanced solvers such as Gurobi.
 
 **Variables:**
 
-* $p_i=(x_i, y_i) \in \mathbb{R}^2$: Position of drone or terminal $i\in A$. For terminals $T$, this is fixed.
-* $r_i \in \mathbb{R}$: Squared range (power) of terminal or drone $i$.
-* $d_{ij} \in \mathbb{R}$: Squared distance between terminal or drone $i$ and terminal or drone $j$.
-* $z_{ij} \in \{0, 1\}$: Binary variable indicating whether terminal $i$ is (directly) connected to terminal $j$.
+* $p_i=(x_i, y_i) \in \mathbb{R}^2$: Represents the position of drone or terminal $i$ where $i$ belongs to the set $A$. Positions are predetermined for terminals, denoted as $T$.
+* $r_i \in \mathbb{R}$: Denotes the squared range (equivalent to power) associated with a terminal or drone $i$.
+* $d_{ij} \in \mathbb{R}$: Indicates the squared distance between any pair of terminal or drone $i$ and $j$.
+* $z_{ij} \in \{0, 1\}$: A binary variable, which is set to 1 if agent $i$ is directly connected to agent $j$ and 0 otherwise.
 
 **Constraints:**
 
-* $d_{ij} \geq squared_dist(p_i, p_j)$ for all $i, j \in A$. This can be implemented via a Second Order Cone Constraint using some auxiliary variables. Second Order Cone Constraints can be solved efficiently.
-* $r_i \geq d_{ij} - (1-z_{ij})\cdot M$ for all $i, j \in A$. This enforces the necessary power to establish the connection if the solver decides to connect $i$ to $j$. $M$ is a large constant such that $r_i \geq d_{ij}$ if $z_{ij}=1$. This is an application of the Big-M method and the most critical part of the model. $M$ can be upper bounded by the maximal squared distance.
-* $\sum_{i \in A', j \in A\setminus A'} z_{ij} \geq 1$ for all $A'\subset A, T\cap A\not=\emptyset, T\cap A\setminus A'\not= \emptycap$. This ensures a strongly connected network and is implemented via callbacks.
+* For every $i, j$ belonging to $A$: $d_{ij} \geq squared\_dist(p_i, p_j)$. This constraint can be articulated using a Second Order Cone Constraint supplemented by certain auxiliary variables. Such constraints can be efficiently propagated.
+* For every $i, j$ in $A$: $r_i \geq d_{ij} - (1-z_{ij})\times M$. Here, the power $r_i$ must be adequate to facilitate the connection if the decision is made to connect $i$ to $j$. The value of $M$ is a significantly large constant such that $r_i \geq d_{ij}$ whenever $z_{ij}=1$. This embodies the Big-M methodology and is the model's most expensive part. The maximum possible squared distance can cap $M$.
+* For any subset $A'$ of $A$ where $T \cap A \neq \emptyset$ and $T \cap (A\setminus A') \neq \emptyset$: $\sum_{i \in A', j \in A\setminus A'} z_{ij} \geq 1$. This stipulation ascertains the establishment of a strongly connected network, integrated through callbacks.
 
-**Objective:**
+**Objective Function:**
 
-Sum of all power assignments $\sum_{i\in A} r_i$
+Minimize the aggregated power consumption across all nodes: $\sum_{i \in A} r_i$.
 
-#### Potential Improvements
+#### Enhancement Proposals
 
-There are already some smaller improvements implements, e.g.,:
+Several incremental enhancements have already been integrated, such as:
 
-* Lowering the big-M constants between terminals, as we now the maximum necessary range between terminals.
-* Enforcing every terminal to have at least one incoming and one outgoing connection.
-* Enforcing at least $|T|$ edges, if there is more than one terminal.
+* Refining the big-M constants between terminals based on our knowledge of the maximum necessary range between them.
+* Mandating that every terminal maintains at least one inbound and one outbound connection.
+* Ensuring a minimum of $|T|$ edges when multiple terminals are present.
 
-Further improvements could be:
+Potential avenues for further refinement include:
 
-* Using lower bounds on the power of individual agents.
-* Using better upper bounds on the power of individual agents, allowing to reduce the big-M constants.
-* Adding additional constraint to enforce the network to be connected.
-* Only using the SOCP and implementing the branch and bound yourself. This would require a smart way to iteratively build the network, such that every subnetwork is a lower bound on the overall network.
+* Establishing minimum power requirements for individual agents.
+* Determining more precise maximum power limits for individual agents, facilitating a reduction in the big-M constants.
+* Introducing constraints to guarantee network connectivity.
+* Exclusively leveraging the SOCP while independently implementing the branch and bound. This approach would necessitate a strategic iterative construction of the network, ensuring that each subnetwork serves as a lower bound for the comprehensive network.
 
 ## Installation
 
