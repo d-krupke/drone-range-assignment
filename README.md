@@ -46,7 +46,7 @@ The computational model is a Mixed Integer Second Order Cone Program (MISOCP), s
 * $p_i=(x_i, y_i) \in \mathbb{R}^2$: Represents the position of drone or terminal $i$ where $i$ belongs to the set $A$. Positions are predetermined for terminals, denoted as $T$.
 * $r_i \in \mathbb{R}$: Denotes the squared range (equivalent to power) associated with a terminal or drone $i$.
 * $d_{ij} \in \mathbb{R}$: Indicates the squared distance between any pair of terminal or drone $i$ and $j$.
-* $z_{ij} \in \{0, 1\}$: A binary variable, which is set to 1 if agent $i$ is directly connected to agent $j$ and 0 otherwise.
+* $z_{ij} \in \{0, 1\}$: A binary variable, which is set to 1 if agent $i$ is directly connected to agent $j$ and 0 otherwise. If the topology is fixed, this variable can be eliminated, making the model a pure SOCP, which can be solved in polynomial time.
 
 **Constraints:**
 
