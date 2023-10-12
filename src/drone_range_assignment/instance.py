@@ -1,4 +1,3 @@
-
 import typing
 import itertools
 import math
@@ -105,9 +104,8 @@ class Instance:
 
     def items(self) -> typing.List[typing.Union[Terminal, Drone]]:
         return self.terminals + self.drones
-    
+
     def diameter(self):
         return max(
-            t1.distance(t2)
-            for t1, t2 in itertools.combinations(self.terminals, 2)
+            t1.distance(t2) for t1, t2 in itertools.combinations(self.terminals, 2)
         )

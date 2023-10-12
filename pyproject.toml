@@ -21,11 +21,9 @@ classifiers = [
     "Development Status :: 3 - Alpha",
 ]
 dependencies = [
-    "conan>=2.0.0",
-    "scikit-build>=0.17.3",
-    "setuptools",
-    "cmake>=3.23",
-    "ninja"
+    "gurobipy",
+    "networkx",
+    "matplotlib",
 ]
 
 [project.urls]
