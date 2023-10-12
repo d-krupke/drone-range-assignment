@@ -35,3 +35,14 @@ The problem can be efficiently solved via a Second Order Cone Program, if the to
 
 Currently, there is only a rather inefficient solver that uses a lot of Big-M to compute the topology.
 There are many opportunities for improvement.
+
+
+## Installation
+
+You can install the package via
+
+```bash
+pip install .
+```
+
+See the notebooks-folder for examples.
