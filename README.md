@@ -78,7 +78,18 @@ Potential avenues for further refinement include:
 You can install the package via
 
 ```bash
-pip install .
+pip install -U git+https://github.com/d-krupke/drone-range-assignment 
 ```
-
 See the notebooks-folder for examples.
+
+### How to run an example
+
+1. Make sure you have a full [Gurobi](https://www.gurobi.com/) license installed. Academic licenses are available for free and just require a registration. I recommend using [conda](https://docs.conda.io/en/latest/) to install Gurobi and activate the license.
+2. Install the package as described above. `pip install -U git+https://github.com/d-krupke/drone-range-assignment`
+3. Install jupyter notebook. `pip install jupyter`
+4. Download one of the notebooks from the `notebooks` folder. E.g., [this one](https://github.com/d-krupke/drone-range-assignment/blob/main/notebooks/example_1.ipynb)
+5. Run the notebook with `jupyter notebook example_1.ipynb` and execute all cells.
+
+It is highly recommended to use virtual environments when experimenting with various packages, such that in case of a conflict, the base environment is not affected, and the environment can be easily removed.
+There are various options for virtual environments, such as [conda](https://docs.conda.io/en/latest/), [virtualenv](https://virtualenv.pypa.io/en/latest/), or [pipenv](https://pipenv.pypa.io/en/latest/).
+I personally prefer conda as it is the most powerful and flexible option, but it is also the most complex one.
