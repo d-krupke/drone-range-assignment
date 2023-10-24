@@ -50,9 +50,9 @@ The computational model is a Mixed Integer Second Order Cone Program (MISOCP), s
 
 **Constraints:**
 
-* For every $i, j$ belonging to $A$: $d_{ij} \geq squared\_dist(p_i, p_j)$. This constraint can be articulated using a Second Order Cone Constraint supplemented by certain auxiliary variables. Such constraints can be efficiently propagated.
+* For every $i, j$ belonging to $A$: $d_{ij} \geq squared\\_dist(p_i, p_j)$. This constraint can be articulated using a Second Order Cone Constraint supplemented by certain auxiliary variables. Such constraints can be efficiently propagated.
 * For every $i, j$ in $A$: $r_i \geq d_{ij} - (1-z_{ij})\times M$. Here, the power $r_i$ must be adequate to facilitate the connection if the decision is made to connect $i$ to $j$. The value of $M$ is a significantly large constant such that $r_i \geq d_{ij}$ whenever $z_{ij}=1$. This embodies the Big-M methodology and is the model's most expensive part. The maximum possible squared distance can cap $M$. Note that this only works with a $\geq$ as this represents a convex cone, however, the objective will enforce the $=$.
-* For any subset $A'$ of $A$ where $T \cap A \neq \emptyset$ and $T \cap (A\setminus A') \neq \emptyset$: $\sum_{i \in A', j \in A\setminus A'} z_{ij} \geq 1$. This stipulation ascertains the establishment of a strongly connected network, integrated through callbacks.
+* For any subset $A'$ of $A$ where $T \cap A' \neq \emptyset$ and $T \cap (A\setminus A') \neq \emptyset$: $\sum_{i \in A', j \in A\setminus A'} z_{ij} \geq 1$. This stipulation ascertains the establishment of a strongly connected network, integrated through callbacks.
 
 **Objective Function:**
 
